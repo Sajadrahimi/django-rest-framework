@@ -98,7 +98,8 @@ class SimpleRouter(BaseRouter):
             url=r'^{prefix}{trailing_slash}$',
             mapping={
                 'get': 'list',
-                'post': 'create'
+                'post': 'create',
+                'head': 'list'
             },
             name='{basename}-list',
             detail=False,
@@ -119,7 +120,8 @@ class SimpleRouter(BaseRouter):
                 'get': 'retrieve',
                 'put': 'update',
                 'patch': 'partial_update',
-                'delete': 'destroy'
+                'delete': 'destroy',
+                'head': 'retrieve'
             },
             name='{basename}-detail',
             detail=True,
@@ -303,7 +305,6 @@ class SimpleRouter(BaseRouter):
                     'basename': basename,
                     'detail': route.detail,
                 })
-
                 view = viewset.as_view(mapping, **initkwargs)
                 name = route.name.format(basename=basename)
                 ret.append(self._url_conf(regex, view, name=name))
