@@ -21,7 +21,6 @@ def api_view(http_method_names=None):
     http_method_names = ['GET'] if (http_method_names is None) else http_method_names
 
     def decorator(func):
-
         WrappedAPIView = type(
             'WrappedAPIView',
             (APIView,),
@@ -82,6 +81,7 @@ def renderer_classes(renderer_classes):
     def decorator(func):
         func.renderer_classes = renderer_classes
         return func
+
     return decorator
 
 
@@ -89,6 +89,7 @@ def parser_classes(parser_classes):
     def decorator(func):
         func.parser_classes = parser_classes
         return func
+
     return decorator
 
 
@@ -96,6 +97,7 @@ def authentication_classes(authentication_classes):
     def decorator(func):
         func.authentication_classes = authentication_classes
         return func
+
     return decorator
 
 
@@ -103,6 +105,7 @@ def throttle_classes(throttle_classes):
     def decorator(func):
         func.throttle_classes = throttle_classes
         return func
+
     return decorator
 
 
@@ -110,6 +113,7 @@ def permission_classes(permission_classes):
     def decorator(func):
         func.permission_classes = permission_classes
         return func
+
     return decorator
 
 
@@ -117,6 +121,7 @@ def schema(view_inspector):
     def decorator(func):
         func.schema = view_inspector
         return func
+
     return decorator
 
 
@@ -145,6 +150,9 @@ def action(methods=None, detail=None, url_path=None, url_name=None, **kwargs):
     methods = ['get'] if methods is None else methods
     methods = [method.lower() for method in methods]
 
+    if 'get' in methods and 'head' not in methods:
+        methods.append('head')
+
     assert detail is not None, (
         "@action() missing required argument: 'detail'"
     )
@@ -171,6 +179,7 @@ def action(methods=None, detail=None, url_path=None, url_name=None, **kwargs):
         func.kwargs['description'] = func.__doc__ or None
 
         return func
+
     return decorator
 
 
@@ -199,7 +208,7 @@ class MethodMapper(dict):
 
     def _map(self, method, func):
         assert method not in self, (
-            "Method '%s' has already been mapped to '.%s'." % (method, self[method]))
+                "Method '%s' has already been mapped to '.%s'." % (method, self[method]))
         assert func.__name__ != self.action.__name__, (
             "Method mapping does not behave like the property decorator. You "
             "cannot use the same method name for each mapping declaration.")
