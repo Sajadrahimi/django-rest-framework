@@ -172,7 +172,7 @@ class ActionDecoratorTestCase(TestCase):
         def test_action(request):
             """Description"""
 
-        assert test_action.mapping == {'get': 'test_action'}
+        assert test_action.mapping == {'get': 'test_action', 'head': 'test_action'}
         assert test_action.detail is True
         assert test_action.url_path == 'test_action'
         assert test_action.url_name == 'test-action'
